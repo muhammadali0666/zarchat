@@ -1,9 +1,9 @@
-import { useUserStore } from "../../lib/userStore"
 import "./userInfo.css"
+import { useUserStore } from "../../../lib/userStore";
 
-export const Userinfo = () => {
+const Userinfo = () => {
 
-  const {currentUser} = useUserStore()
+  const { currentUser } = useUserStore();
 
   return (
     <div className='userInfo'>
@@ -19,3 +19,5 @@ export const Userinfo = () => {
     </div>
   )
 }
+
+export default Userinfo

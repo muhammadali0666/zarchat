@@ -1,43 +1,42 @@
 import { useEffect } from "react";
-import { Chat } from "./components/chat/chat";
-import { Details } from "./components/details/details";
-import { List } from "./components/list/list";
-import { Login } from "./components/login/Login";
-import { Notification } from "./components/notification/Notification";
+import Chat from "./components/chat/Chat";
+import Detail from "./components/detail/Detail";
+import List from "./components/list/List";
+import Login from "./components/login/Login";
+import Notification from "./components/notification/Notification";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./components/lib/firebase";
-import { useUserStore } from "./components/lib/userStore";
+import { auth } from "./lib/firebase";
+import { useUserStore } from "./lib/userStore";
+import { useChatStore } from "./lib/chatStore";
 
 const App = () => {
-  const {currentUser, isLoading, fetchUserInfo} = useUserStore()
+  const { currentUser, isLoading, fetchUserInfo } = useUserStore();
+  const { chatId } = useChatStore();
 
   useEffect(() => {
-    const unSub = onAuthStateChanged(auth, (user)=> {
-      fetchUserInfo(user?.uid)
-    })
+    const unSub = onAuthStateChanged(auth, (user) => {
+      fetchUserInfo(user?.uid);
+    });
 
     return () => {
-      unSub()
-    }
+      unSub();
+    };
+  }, [fetchUserInfo]);
 
-  },[fetchUserInfo])
-
-
-
-  if(isLoading) return <div className="loading">Loading...</div>
+  if (isLoading) return <div className="loading">Loading...</div>;
 
   return (
     <div className="container">
       {currentUser ? (
         <>
           <List />
-          <Chat />
-          <Details />
+          {chatId && <Chat />}
+          {chatId && <Detail />}
         </>
       ) : (
         <Login />
       )}
-      <Notification/>
+      <Notification />
     </div>
   );
 };
